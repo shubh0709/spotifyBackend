@@ -2,6 +2,6 @@
     "watch": ["src"],
     "ext": "ts",
     "ignore": ["src/**/*.spec.ts"],
-    "exec": "webpack && ts-node ./dist/bundle.js"
+    "exec": "npm run build && ts-node ./dist/bundle.js"
   }
   
