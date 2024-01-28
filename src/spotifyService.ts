@@ -4,12 +4,10 @@ dotenv.config();
 
 let spotifyApi: SpotifyWebApi;
 
-console.log("client id: ", process.env.SPOTIFY_CLIENT_ID);
-
 spotifyApi = new SpotifyWebApi({
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: 'http://localhost:8080/callback'
+    redirectUri: process.env.NODE_ENV === "development"? process.env.LOCALHOST_REDIRECT_URI : process.env.PRODUCTION_REDIRECT_URI
 });
 
 const scopes = ['user-read-private', 'user-read-email', 'playlist-read-private'];
