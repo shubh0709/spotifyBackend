@@ -1,6 +1,5 @@
 import SpotifyWebApi from 'spotify-web-api-node';
 import dotenv from 'dotenv';
-import { DEVELOPMENT } from './constants';
 import { Comments } from './types';
 dotenv.config();
 
@@ -9,7 +8,7 @@ let spotifyApi: SpotifyWebApi;
 spotifyApi = new SpotifyWebApi({
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: process.env.NODE_ENV === DEVELOPMENT ? `${process.env.LOCALHOST_NODE_URL}/callback` : `${process.env.PRODUCTION_NODE_URL}/callback`
+    redirectUri: process.env.NODE_ENV === 'development' ? `${process.env.LOCALHOST_NODE_URL}/callback` : `${process.env.PRODUCTION_NODE_URL}/callback`
 });
 
 const scopes = ['user-read-private', 'user-read-email', 'playlist-read-private'];

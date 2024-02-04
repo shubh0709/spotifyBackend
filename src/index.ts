@@ -4,7 +4,7 @@ import express from 'express';
 import { getToken, getLoginUrl, searchTracks, getUserDetails, addReplyToComment } from './spotifyService';
 import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
-import { CORS_OPTIONS, DEVELOPMENT } from './constants';
+import { CORS_OPTIONS } from './constants';
 import morgan from 'morgan';
 import session from 'express-session';
 import { Comments } from './types';
