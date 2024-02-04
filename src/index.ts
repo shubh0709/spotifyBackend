@@ -9,7 +9,11 @@ import morgan from 'morgan';
 import session from 'express-session';
 import { Comments } from './types';
 
-
+console.log({ NODE_ENV: process.env.NODE_ENV });
+console.log({ CLIENT_URL: process.env.CLIENT_URL });
+console.log({ SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID });
+console.log({ PRODUCTION_NODE_URL: process.env.PRODUCTION_NODE_URL });
+console.log({ SESSION_SECRET: process.env.SESSION_SECRET });
 
 const app = express();
 
