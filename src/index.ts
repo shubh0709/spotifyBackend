@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
-dotenv.config();
+if (process.env.NODE_ENV === 'development') {
+    dotenv.config();
+}
 import express from 'express';
 import { getToken, getLoginUrl, searchTracks, getUserDetails, addReplyToComment } from './spotifyService';
 import cors from 'cors';
