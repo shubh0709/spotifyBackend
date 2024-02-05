@@ -11,12 +11,6 @@ import morgan from 'morgan';
 import session from 'express-session';
 import { Comments } from './types';
 
-console.log({ NODE_ENV: process.env.NODE_ENV });
-console.log({ CLIENT_URL: process.env.CLIENT_URL });
-console.log({ SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID });
-console.log({ PRODUCTION_NODE_URL: process.env.PRODUCTION_NODE_URL });
-console.log({ SESSION_SECRET: process.env.SESSION_SECRET });
-
 const app = express();
 
 app.use(morgan('dev'));
@@ -66,12 +60,11 @@ app.get('/callback', async (req, res) => {
             const tokenData = await getToken(code as string);
             const userDetails = await getUserDetails();
 
-            // Store user details and access token in the session
             req.session.user = userDetails;
             req.session.accessToken = tokenData!.access_token;
 
-            console.log("redirecting");
-            res.redirect('/');
+            const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+            res.redirect(clientUrl);
         } catch (error) {
             res.status(500).send('Error during token exchange');
         }
@@ -169,8 +162,6 @@ app.post('/comments/:commentId/reply', (req, res) => {
     if (!isAdded) {
         return res.status(404).send('Parent comment not found');
     }
-
-    // console.log({ "added comment: ": JSON.stringify(comments) });
 
     res.status(201).json(reply);
 });

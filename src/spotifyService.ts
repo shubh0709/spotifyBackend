@@ -44,7 +44,6 @@ export function addReplyToComment(comments: Comments[], commentId: string, reply
             return true;
         }
 
-        // Check if this comment has replies and recursively search within them
         if (comment.replies.length > 0) {
             const isAdded = addReplyToComment(comment.replies, commentId, reply);
             if (isAdded) return true;
@@ -68,17 +67,15 @@ const refreshAccessToken = async () => {
     }
 };
 
-// Update the searchTracks method to handle token expiry
 const searchTracks = async (query: string): Promise<{ name: string, id: string }[]> => {
     try {
         const data = await spotifyApi.searchTracks(query);
         return data.body.tracks!.items.map((val: SpotifyApi.TrackObjectFull) => ({ name: val.name, id: val.id }));
     } catch (error: any) {
         if (error.statusCode === 401) {
-            // Token expired, refresh it
             const newToken = await refreshAccessToken();
             if (newToken) {
-                return await searchTracks(query); // Retry the search with the new token
+                return await searchTracks(query);
             }
         }
         console.error('Error searching tracks:', error);
