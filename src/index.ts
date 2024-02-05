@@ -62,6 +62,7 @@ app.get('/callback', async (req, res) => {
 
             req.session.user = userDetails;
             req.session.accessToken = tokenData!.access_token;
+            res.cookie('isAuthenticated', true, { httpOnly: true, sameSite: 'strict', secure: process.env.NODE_ENV !== 'development' });
 
             const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
             res.redirect(clientUrl);
@@ -135,7 +136,7 @@ function findCommentById(comments: Comments[], commentId: string): Comments | un
 
 app.post('/comments/:commentId/reply', (req, res) => {
     const { commentId } = req.params;
-    const { text, userId } = req.body;
+    const { text, username } = req.body;
 
     console.log({ "replying to: ": commentId });
 
@@ -154,7 +155,7 @@ app.post('/comments/:commentId/reply', (req, res) => {
         id: uuidv4(),
         trackId: parentComment.trackId,
         text,
-        username: userId || 'anonymous',
+        username: username || 'anonymous',
         replies: []
     };
 
