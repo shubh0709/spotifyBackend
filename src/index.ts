@@ -18,13 +18,14 @@ app.use(cors(CORS_OPTIONS));
 app.use(express.json());
 app.use(session({
     secret: process.env.SESSION_SECRET ?? "",
+    cookie: {
+        httpOnly: false, // Allow client-side scripts to access the cookie
+        secure: process.env.NODE_ENV !== 'development',
+        sameSite: process.env.NODE_ENV === 'development' ? 'lax' : 'none',
+        maxAge: 1000 * 60 * 60 * 24 // 24 hours
+    },
     resave: false,
     saveUninitialized: false,
-    cookie: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV !== 'development',
-        sameSite: 'strict'
-    }
 }));
 
 const PORT = process.env.PORT || 8080;
@@ -62,10 +63,16 @@ app.get('/callback', async (req, res) => {
 
             req.session.user = userDetails;
             req.session.accessToken = tokenData!.access_token;
-            res.cookie('isAuthenticated', true, { httpOnly: true, sameSite: 'strict', secure: process.env.NODE_ENV !== 'development' });
+            res.cookie('isAuthenticated', true, {
+                httpOnly: false,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: process.env.NODE_ENV === 'development' ? 'lax' : 'none',
+                maxAge: 1000 * 60 * 60 * 24
+            }
+            );
 
             const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
-            res.redirect(clientUrl);
+            res.redirect(`${clientUrl}/home`);
         } catch (error) {
             res.status(500).send('Error during token exchange');
         }
